@@ -19,13 +19,13 @@ import java.io.IOException;
 @SpringBootApplication
 @RestController
 public class Application {
-    private String REST_SERVICE_URI = "http://192.168.99.100:8080/";//"http://localhost:8080/";
+    private String REST_EVENT_URI = "http://192.168.99.100:8080/"; //"http://localhost:8080/";
 
     @Autowired
     ReservationRepository repository;
 
     @RequestMapping("/")
-    public String home() {return "complete Hello Docker World";}
+    public String home() {return "complete Hello Docker World!";}
 
     @RequestMapping(method = RequestMethod.POST, value = "/booking")
     public int add(@RequestBody Reservation reservation) {
@@ -41,20 +41,17 @@ public class Application {
         int response = 0;
         try {
             response = sendPostToEvent(reservation);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return response;
     }
 
-    public int sendPostToEvent(Reservation reservation) throws IOException {
+    public int sendPostToEvent(Reservation reservation) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
-//
-//        return restTemplate.postForObject(REST_SERVICE_URI+"/events/"
-//                + reservation.getEventId(), new NumberOfContestants(Integer.parseInt(reservation.getNumber())), HttpStatus.class);
 
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(REST_SERVICE_URI+"/events/" + reservation.getEventId());
+        HttpPost httpPost = new HttpPost(REST_EVENT_URI +"/events/" + reservation.getEventId());
 
         String json = "{\"number\":\"" +reservation.getNumber() + "\"}";
         StringEntity entity = new StringEntity(json);
@@ -67,11 +64,11 @@ public class Application {
         return response.getStatusLine().getStatusCode();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/events/{event_id}")
-    public int event(@RequestBody NumberOfContestants input, @PathVariable Long event_id) {
-        //...
-        return HttpStatus.FOUND.value();
-    }
+//    @RequestMapping(method = RequestMethod.POST, value = "/events/{event_id}")
+//    public int event(@RequestBody NumberOfContestants input, @PathVariable Long event_id) {
+//        //...
+//        return HttpStatus.FOUND.value();
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
