@@ -3,4 +3,4 @@ language: java
 jdk:
 - oraclejdk8
 script:
-- complete/mvnw clean install
+- test/run_with_maven.sh
