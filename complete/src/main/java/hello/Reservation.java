@@ -29,6 +29,7 @@ public class Reservation implements Serializable {
     @Column(name = "number")
     private String number;
 
+
     Reservation() { // jpa only
     }
 
