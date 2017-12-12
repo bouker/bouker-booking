@@ -6,6 +6,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.*;
@@ -19,7 +20,8 @@ import java.io.IOException;
 @SpringBootApplication
 @RestController
 public class Application {
-    private String REST_EVENT_URI = "http://192.168.99.100:8080/"; //"http://localhost:8080/";
+    @Value("${spring.rest.event}")
+    private String REST_EVENT_URI;
 
     @Autowired
     ReservationRepository repository;
