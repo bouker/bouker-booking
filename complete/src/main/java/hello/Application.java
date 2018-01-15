@@ -5,6 +5,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +21,9 @@ import java.io.IOException;
 @SpringBootApplication
 @RestController
 public class Application {
+
+    static Logger logger = Logger.getLogger(Application.class.getName());
+
     @Value("${spring.rest.event}")
     private String REST_EVENT_URI;
 
@@ -38,6 +42,7 @@ public class Application {
         if(!DataValidator.isValidate(email, phoneNumber, number))
             return HttpStatus.BAD_REQUEST.value();
 
+        logger.info("Save reservation to repository - (mail: " + email +", phoneNumber: " + phoneNumber + ", number: " + number + ")");
         repository.save(reservation);
 
         int response = 0;
@@ -61,6 +66,7 @@ public class Application {
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
 
+        logger.info("create response to event: " + json);
         CloseableHttpResponse response = client.execute(httpPost);
         client.close();
         return response.getStatusLine().getStatusCode();
