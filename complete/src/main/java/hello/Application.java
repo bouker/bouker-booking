@@ -20,6 +20,7 @@ import java.io.IOException;
 
 @SpringBootApplication
 @RestController
+@CrossOrigin
 public class Application {
 
     static Logger logger = Logger.getLogger(Application.class.getName());
